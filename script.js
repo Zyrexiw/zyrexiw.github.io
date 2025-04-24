@@ -1,4 +1,4 @@
-// script.js
+
 'use strict';
 const STORAGE_KEY = 'rapports';
 const HISTORY_KEY = 'rapports_history';
@@ -21,20 +21,20 @@ function saveHistory(entry) { const h = getHistory(); h.unshift(entry); localSto
 
 let editIndex = null;
 
-// Toolbar commands
+
 function applyCommand(cmd) { document.execCommand(cmd, false, null); }
 function applyColor(color) { document.execCommand('foreColor', false, color); }
 
 document.querySelectorAll('.toolbar button').forEach(btn => btn.addEventListener('click', () => applyCommand(btn.dataset.cmd)));
 document.querySelectorAll('input[type=color]').forEach(p => p.addEventListener('input', e => applyColor(e.target.value)));
 
-// Tabs
+
 Array.from(document.querySelectorAll('.menu-item')).forEach(item => item.addEventListener('click', () => {
   document.querySelector('.menu-item.active').classList.remove('active'); item.classList.add('active');
   document.querySelector('.tab-content.active').classList.remove('active'); document.getElementById(item.dataset.tab).classList.add('active');
 }));
 
-// Handle form submissions
+
 function handleFormSubmit(formId, commentaireId, isEdit) {
   const form = document.getElementById(formId);
   form.addEventListener('submit', e => {
@@ -59,7 +59,7 @@ function handleFormSubmit(formId, commentaireId, isEdit) {
 handleFormSubmit('report-form', 'commentaire', false);
 handleFormSubmit('edit-form', 'edit-commentaire', true);
 
-// Render
+
 function renderHistorique() {
   const ul = document.getElementById('historique-list'); ul.innerHTML = '';
   getHistory().forEach(entry => {
@@ -78,12 +78,12 @@ function renderRapportsList() {
   });
 }
 
-// Actions
+
 function viewReport(i) { openReport(getRapports()[i]); }
 function editReport(i) { openEditModal(i); }
 function removeReport(i) { deleteRapport(i); saveHistory({action:'supprimé',index:i+1,date:new Date()}); notify('Rapport supprimé !'); renderRapportsList(); renderHistorique(); }
 
-// Edit modal
+
 function openEditModal(i) {
   const r = getRapports()[i]; editIndex = i;
   const f = document.getElementById('edit-form');
@@ -95,12 +95,10 @@ function openEditModal(i) {
 }
 document.getElementById('cancel-edit').addEventListener('click', () => { document.getElementById('edit-modal').classList.add('hidden'); editIndex = null; });
 
-// Generate report HTML
 function generateReportHTML(r) {
   return `<!DOCTYPE html><html lang=\"fr\"><head><meta charset=\"UTF-8\"><title>Rapport</title><link href=\"https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\"/><style>body{margin:0;display:flex;align-items:center;justify-content:center;background:#1A202C;font-family:'Montserrat',sans-serif}.letter{background:#FFF;width:600px;padding:40px;box-shadow:0 2px 10px rgba(0,0,0,.2);line-height:1.6;white-space:pre-wrap;word-break:break-word;position:relative}.download-wrapper{position:absolute;top:20px;right:20px}.download-btn{background:#38B2AC;color:#fff;padding:8px 12px;border:none;border-radius:4px;cursor:pointer}.download-btn:hover{background:#2C5282}</style></head><body><div class=\"download-wrapper\"><button class=\"download-btn\" id=\"download-btn\"><i class=\"fas fa-download\"></i> Télécharger</button></div><div class=\"letter\"><h2>Rapport d'évaluation</h2><h3>Agent Rédacteur</h3><p>Nom: ${r.redacteur.nom}</p><p>RIO: ${r.redacteur.rio}</p><p>Grade: ${r.redacteur.grade}</p><h3>Agent Tutoré</h3><p>Nom: ${r.tutore.nom}</p><p>RIO: ${r.tutore.rio}</p><p>Grade: ${r.tutore.grade}</p><h3>Évaluations</h3><ul><li>Radio: ${r.evaluations.radio||'Non évalué'}</li><li>Conduite: ${r.evaluations.conduite||'Non évalué'}</li><li>Adaptation: ${r.evaluations.adaptation||'Non évalué'}</li></ul><h3>Commentaire</h3><blockquote>${r.commentaire||'Aucun commentaire'}</blockquote></div><script src=\"https://html2canvas.hertzen.com/dist/html2canvas.min.js\"></script><script>document.getElementById('download-btn').addEventListener('click',function(){html2canvas(document.querySelector('.letter'),{scale:2,useCORS:true}).then(c=>c.toBlob(b=>{let l=document.createElement('a');l.href=URL.createObjectURL(b);l.download='rapport.png';l.click();URL.revokeObjectURL(l.href);},'image/png'));});</script></body></html>`;
 }
 
 function openReport(r) { const w = window.open(); w.document.write(generateReportHTML(r)); w.document.close(); }
 
-// Initialize and sidebar toggle
 renderRapportsList(); renderHistorique(); const toggleBtn = document.getElementById('toggle-sidebar'); toggleBtn.addEventListener('click', () => document.querySelector('.sidebar').classList.toggle('open')); toggleBtn.addEventListener('dblclick', () => document.querySelector('.sidebar').classList.toggle('collapsed'));
