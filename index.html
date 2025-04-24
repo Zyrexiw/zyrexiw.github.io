@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -40,6 +39,15 @@
         <div class="rapport-layout">
           <div class="form-container">
             <form id="report-form">
+              <!-- Champ Date ajouté -->
+              <fieldset>
+                <legend>Date de la Vacation</legend>
+                <label>
+                  Sélectionnez la date
+                  <input type="date" id="report-date" required>
+                </label>
+              </fieldset>
+
               <fieldset><legend>Agent Rédacteur</legend>
                 <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
                 <label>RIO<input type="text" id="redacteur-rio" required></label>
@@ -82,6 +90,15 @@
     <div class="modal-content">
       <h2>Modifier le Rapport</h2>
       <form id="edit-form">
+        <!-- Champ Date ajouté pour l'édition -->
+        <fieldset>
+          <legend>Date du rapport</legend>
+          <label>
+            Sélectionnez la date
+            <input type="date" id="edit-report-date" required>
+          </label>
+        </fieldset>
+
         <fieldset><legend>Agent Rédacteur</legend>
           <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
           <label>RIO<input type="text" id="redacteur-rio" required></label>
