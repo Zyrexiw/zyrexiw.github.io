@@ -6,7 +6,8 @@
 *{margin:0;padding:0;box-sizing:border-box;transition:all .2s ease}
 body,html{height:100%;font-family:var(--font);background:var(--bg);color:var(--text)}
 .container{display:flex;height:100vh}
-.sidebar{width:260px;background:var(--sidebar);padding:20px;overflow-y:auto;position:relative}
+.sidebar{width:260px;background:var(--sidebar);padding:20px;display:flex;flex-direction:column}
+.menu-container{flex:1;overflow-y:auto}
 .logo{font-size:1.8rem;margin-bottom:1.5rem;color:var(--text)}
 .menu-item{display:flex;align-items:center;padding:10px;border-radius:6px;cursor:pointer;margin-bottom:10px}
 .menu-item .icon{width:24px;text-align:center;margin-right:10px;color:var(--text)}
@@ -35,4 +36,4 @@ input[type=text],select{padding:8px;border:1px solid #4A5568;border-radius:4px;b
 .btn-submit{background:var(--primary);color:#fff;padding:8px 16px;border:none;border-radius:4px;cursor:pointer}
 .btn-submit:hover{background:var(--secondary)}
 .notification{position:fixed;top:20px;right:20px;background:var(--primary);color:#fff;padding:10px;border-radius:4px;display:none}
-.sidebar-footer{position:absolute;bottom:0;left:0;width:100%;padding:10px;font-size:0.85rem;text-align:center;color:var(--text);background:var(--sidebar);border-top:1px solid #4A5568}
+.sidebar-footer{margin-top:auto;padding:10px;font-size:0.85rem;text-align:center;color:var(--text);background:var(--sidebar);border-top:1px solid #4A5568}
