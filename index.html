@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +8,7 @@
   <title>Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=11" />
 </head>
 <body>
   <button id="toggle-sidebar" class="toggle-btn"><i class="fas fa-bars"></i></button>
@@ -32,6 +33,7 @@
     <main class="content">
       <section id="historique" class="tab-content active">
         <h1>Historique</h1>
+        <button id="clear-history" class="btn-clear">Vider l'historique</button>
         <ul id="historique-list" class="history-list"></ul>
       </section>
       <section id="rapport-agent" class="tab-content">
@@ -39,23 +41,19 @@
         <div class="rapport-layout">
           <div class="form-container">
             <form id="report-form">
-              <!-- Champ Date ajouté -->
               <fieldset>
                 <legend>Date et Heure de la Vacation</legend>
                 <label>
-                  Sélectionnez la date
-                  <input type="date" id="report-date" required>
+                  Sélectionnez date & heure
+                  <input type="datetime-local" id="report-date" required>
                 </label>
               </fieldset>
-
               <fieldset><legend>Agent Rédacteur</legend>
                 <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
-                <label>RIO<input type="text" id="redacteur-rio" required></label>
                 <label>Grade<input type="text" id="redacteur-grade" required></label>
               </fieldset>
               <fieldset><legend>Agent Tutoré</legend>
                 <label>Nom & Prénom<input type="text" id="tutore-nom" required></label>
-                <label>RIO<input type="text" id="tutore-rio" required></label>
                 <label>Grade<input type="text" id="tutore-grade" required></label>
               </fieldset>
               <fieldset><legend>Évaluation</legend>
@@ -63,6 +61,7 @@
                   <label>Radio<select id="critere-radio"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
                   <label>Conduite<select id="critere-conduite"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
                   <label>Adaptation<select id="critere-adaptation"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+                  <label>Comportement<select id="critere-comportement"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
                 </div>
               </fieldset>
               <fieldset><legend>Commentaire</legend>
@@ -90,30 +89,28 @@
     <div class="modal-content">
       <h2>Modifier le Rapport</h2>
       <form id="edit-form">
-        <!-- Champ Date ajouté pour l'édition -->
         <fieldset>
-          <legend>Date du rapport</legend>
+          <legend>Date et Heure du Rapport</legend>
           <label>
-            Sélectionnez la date
-            <input type="date" id="edit-report-date" required>
+            Sélectionnez date & heure
+            <input type="datetime-local" id="edit-report-date" required>
           </label>
         </fieldset>
-
+        <!-- reste du formulaire identique -->
         <fieldset><legend>Agent Rédacteur</legend>
-          <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
-          <label>RIO<input type="text" id="redacteur-rio" required></label>
-          <label>Grade<input type="text" id="redacteur-grade" required></label>
+          <label>Nom & Prénom<input type="text" id="edit-redacteur-nom" required></label>
+          <label>Grade<input type="text" id="edit-redacteur-grade" required></label>
         </fieldset>
         <fieldset><legend>Agent Tutoré</legend>
-          <label>Nom & Prénom<input type="text" id="tutore-nom" required></label>
-          <label>RIO<input type="text" id="tutore-rio" required></label>
-          <label>Grade<input type="text" id="tutore-grade" required></label>
+          <label>Nom & Prénom<input type="text" id="edit-tutore-nom" required></label>
+          <label>Grade<input type="text" id="edit-tutore-grade" required></label>
         </fieldset>
         <fieldset><legend>Évaluation</legend>
           <div class="eval-grid">
-            <label>Radio<select id="critere-radio"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
-            <label>Conduite<select id="critere-conduite"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
-            <label>Adaptation<select id="critere-adaptation"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Radio<select id="edit-critere-radio"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Conduite<select id="edit-critere-conduite"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Adaptation<select id="edit-critere-adaptation"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Comportement<select id="edit-critere-comportement"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
           </div>
         </fieldset>
         <fieldset><legend>Commentaire</legend>
