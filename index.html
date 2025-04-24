@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +8,7 @@
   <title>Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 <body>
   <button id="toggle-sidebar" class="toggle-btn"><i class="fas fa-bars"></i></button>
@@ -28,6 +29,7 @@
         © 2025 Zyrexiw. Tous droits réservés.
       </footer>
     </aside>
+
     <main class="content">
       <section id="historique" class="tab-content active">
         <h1>Historique</h1>
@@ -74,6 +76,43 @@
       </section>
     </main>
   </div>
+
+  <!-- Edit Modal -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Modifier le Rapport</h2>
+      <form id="edit-form">
+        <fieldset><legend>Agent Rédacteur</legend>
+          <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
+          <label>RIO<input type="text" id="redacteur-rio" required></label>
+          <label>Grade<input type="text" id="redacteur-grade" required></label>
+        </fieldset>
+        <fieldset><legend>Agent Tutoré</legend>
+          <label>Nom & Prénom<input type="text" id="tutore-nom" required></label>
+          <label>RIO<input type="text" id="tutore-rio" required></label>
+          <label>Grade<input type="text" id="tutore-grade" required></label>
+        </fieldset>
+        <fieldset><legend>Évaluation</legend>
+          <div class="eval-grid">
+            <label>Radio<select id="critere-radio"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Conduite<select id="critere-conduite"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+            <label>Adaptation<select id="critere-adaptation"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+          </div>
+        </fieldset>
+        <fieldset><legend>Commentaire</legend>
+          <div class="toolbar">
+            <button type="button" data-cmd="bold"><i class="fas fa-bold"></i></button>
+            <button type="button" data-cmd="italic"><i class="fas fa-italic"></i></button>
+            <input type="color" id="color-picker" title="Choisir la couleur du texte">
+          </div>
+          <div id="edit-commentaire" class="comment-box" contenteditable="true" placeholder="Ajoutez un commentaire…"></div>
+        </fieldset>
+        <button type="button" id="cancel-edit" class="btn-cancel">Annuler</button>
+        <button type="submit" class="btn-submit">Valider</button>
+      </form>
+    </div>
+  </div>
+
   <div id="notification" class="notification"></div>
   <script src="script.js"></script>
 </body>

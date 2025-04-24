@@ -1,3 +1,5 @@
+
+// script.js
 'use strict';
 const STORAGE_KEY='rapports';
 function notify(msg){const n=document.getElementById('notification');n.textContent=msg;n.style.display='block';setTimeout(()=>n.style.display='none',2000);}
@@ -5,24 +7,74 @@ function getRapports(){return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'
 function saveRapport(r,i=null){const a=getRapports();if(i!=null)a[i]=r;else a.push(r);localStorage.setItem(STORAGE_KEY,JSON.stringify(a));}
 function deleteRapport(i){const a=getRapports();a.splice(i,1);localStorage.setItem(STORAGE_KEY,JSON.stringify(a));}
 let editIndex=null;
+
 document.getElementById('report-form').addEventListener('submit',e=>{e.preventDefault();const f=e.target;const r={date:new Date(),redacteur:{nom:f['redacteur-nom'].value,rio:f['redacteur-rio'].value,grade:f['redacteur-grade'].value},tutore:{nom:f['tutore-nom'].value,rio:f['tutore-rio'].value,grade:f['tutore-grade'].value},evaluations:{radio:f['critere-radio'].value,conduite:f['critere-conduite'].value,adaptation:f['critere-adaptation'].value},commentaire:document.getElementById('commentaire').innerHTML};saveRapport(r,editIndex);notify('Rapport enregistré !');openReport(r);editIndex=null;renderRapportsList();renderHistorique();f.reset();document.getElementById('commentaire').innerHTML='';});
-document.querySelectorAll('.toolbar button').forEach(btn=>btn.addEventListener('click',()=>{const cmd=btn.dataset.cmd;document.execCommand(cmd,false,null);}));
+document.querySelectorAll('.toolbar button').forEach(btn=>btn.addEventListener('click',()=>{document.execCommand(btn.dataset.cmd,false,null);}));
 document.getElementById('color-picker').addEventListener('input',()=>{document.execCommand('foreColor',false,document.getElementById('color-picker').value);});
 Array.from(document.querySelectorAll('.menu-item')).forEach(item=>item.addEventListener('click',()=>{document.querySelector('.menu-item.active').classList.remove('active');item.classList.add('active');document.querySelector('.tab-content.active').classList.remove('active');document.getElementById(item.dataset.tab).classList.add('active');}));
+
 function renderHistorique(){const ul=document.getElementById('historique-list');ul.innerHTML='';getRapports().forEach(r=>{const li=document.createElement('li');li.innerHTML=`<i class="fas fa-file-alt"></i><span>Rapport créé le ${new Date(r.date).toLocaleString()}</span>`;ul.appendChild(li);});}
 function renderRapportsList(){const ul=document.getElementById('rapport-list');ul.innerHTML='';getRapports().forEach((r,i)=>{const li=document.createElement('li');li.innerHTML=`<span>#${i+1} - ${r.tutore.nom}</span><div><span class="action-btn" onclick="viewReport(${i})"><i class="fas fa-eye"></i></span><span class="action-btn" onclick="editReport(${i})"><i class="fas fa-edit"></i></span><span class="action-btn" onclick="deleteReport(${i})"><i class="fas fa-trash"></i></span></div>`;ul.appendChild(li);});}
 function viewReport(i){openReport(getRapports()[i]);}
-function editReport(i){editIndex=i;const r=getRapports()[i],f=document.getElementById('report-form');f['redacteur-nom'].value=r.redacteur.nom;f['redacteur-rio'].value=r.redacteur.rio;f['redacteur-grade'].value=r.redacteur.grade;f['tutore-nom'].value=r.tutore.nom;f['tutore-rio'].value=r.tutore.rio;f['tutore-grade'].value=r.tutore.grade;f['critere-radio'].value=r.evaluations.radio;f['critere-conduite'].value=r.evaluations.conduite;f['critere-adaptation'].value=r.evaluations.adaptation;document.getElementById('commentaire').innerHTML=r.commentaire;document.querySelector('[data-tab="rapport-agent"]').click();}
+
+// override editReport to use modal
+function editReport(i){openEditModal(i);} 
+
+function openEditModal(i) {
+  const r = getRapports()[i];
+  const modal = document.getElementById('edit-modal');
+  const form = document.getElementById('edit-form');
+  editIndex = i;
+  // populate fields
+  form['redacteur-nom'].value = r.redacteur.nom;
+  form['redacteur-rio'].value = r.redacteur.rio;
+  form['redacteur-grade'].value = r.redacteur.grade;
+  form['tutore-nom'].value = r.tutore.nom;
+  form['tutore-rio'].value = r.tutore.rio;
+  form['tutore-grade'].value = r.tutore.grade;
+  form['critere-radio'].value = r.evaluations.radio;
+  form['critere-conduite'].value = r.evaluations.conduite;
+  form['critere-adaptation'].value = r.evaluations.adaptation;
+  document.getElementById('edit-commentaire').innerHTML = r.commentaire;
+  modal.classList.remove('hidden');
+}
+
+document.getElementById('cancel-edit').addEventListener('click', () => {
+  document.getElementById('edit-modal').classList.add('hidden');
+  editIndex = null;
+});
+
+document.getElementById('edit-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  const r = {
+    date: new Date(),
+    redacteur: { nom: f['redacteur-nom'].value, rio: f['redacteur-rio'].value, grade: f['redacteur-grade'].value },
+    tutore: { nom: f['tutore-nom'].value, rio: f['tutore-rio'].value, grade: f['tutore-grade'].value },
+    evaluations: { radio: f['critere-radio'].value, conduite: f['critere-conduite'].value, adaptation: f['critere-adaptation'].value },
+    commentaire: document.getElementById('edit-commentaire').innerHTML
+  };
+  saveRapport(r, editIndex);
+  document.getElementById('edit-modal').classList.add('hidden');
+  renderRapportsList();
+  renderHistorique();
+  notify('Rapport mis à jour !');
+});
+
 function deleteReport(i){deleteRapport(i);notify('Rapport supprimé !');renderRapportsList();renderHistorique();}
-function openReport(r){const w=window.open();w.document.write(generateReportHTML(r));w.document.close();}
+
+function openReport(r){
+  const w=window.open();
+  w.document.write(generateReportHTML(r));
+  w.document.close();
+}
+
 function generateReportHTML(r){return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/><style>body{margin:0;display:flex;align-items:center;justify-content:center;background:#1A202C;font-family:'Montserrat',sans-serif} .letter{background:#FFF;width:600px;padding:40px;box-shadow:0 2px 10px rgba(0,0,0,.2);line-height:1.6;white-space:pre-wrap;word-break:break-word;position:relative} .letter u{text-decoration:underline} .download-wrapper{position:absolute;top:20px;right:20px} .download-btn{background:#38B2AC;color:#fff;padding:8px 12px;border:none;border-radius:4px;cursor:pointer} .download-btn:hover{background:#2C5282}</style></head><body><div class="download-wrapper"><button class="download-btn" id="download-btn"><i class="fas fa-download"></i> Télécharger</button></div><div class="letter" id="letter-container"><img src="police_logo.png" style="display:block;margin:0 auto 20px;width:120px"/><h2>Rapport d'évaluation</h2><h3>Agent Rédacteur</h3><p>Nom: ${r.redacteur.nom}</p><p>RIO: ${r.redacteur.rio}</p><p>Grade: ${r.redacteur.grade}</p><h3>Agent Tutoré</h3><p>Nom: ${r.tutore.nom}</p><p>RIO: ${r.tutore.rio}</p><p>Grade: ${r.tutore.grade}</p><h3>Évaluations</h3><ul><li>Radio: ${r.evaluations.radio||'Non évalué'}</li><li>Conduite: ${r.evaluations.conduite||'Non évalué'}</li><li>Adaptation: ${r.evaluations.adaptation||'Non évalué'}</li></ul><h3>Commentaire</h3><blockquote>${r.commentaire||'Aucun commentaire'}</blockquote></div><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>document.getElementById('download-btn').addEventListener('click',function(){html2canvas(document.getElementById('letter-container'),{scale:2,useCORS:true}).then(canvas=>canvas.toBlob(blob=>{const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='rapport.png';link.click();URL.revokeObjectURL(link.href);},'image/png'));});</script></body></html>`;}
+
+// initialize
 renderRapportsList();renderHistorique();
 
+// sidebar toggle
 const toggleBtn = document.getElementById('toggle-sidebar');
-toggleBtn.addEventListener('click', () => {
-  document.querySelector('.sidebar').classList.toggle('open');
-});
-
-toggleBtn.addEventListener('dblclick', () => {
-  document.querySelector('.sidebar').classList.toggle('collapsed');
-});
+toggleBtn.addEventListener('click', () => { document.querySelector('.sidebar').classList.toggle('open'); });
+toggleBtn.addEventListener('dblclick', () => { document.querySelector('.sidebar').classList.toggle('collapsed'); });
