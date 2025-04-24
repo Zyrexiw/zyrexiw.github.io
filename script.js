@@ -139,7 +139,7 @@ function notify(msg) {
       `<i class="fas fa-download"></i> Télécharger</button></div><div class="letter">` +
       `<img src="${LOGO_BASE64}" alt="Logo Police" class="logo"/>` +
       `<h2>Rapport d'évaluation</h2>` +
-      `<p><strong>Date de la vacation :</strong> ${dateFR}</p>` +
+      `<p><strong>Date et heure de la vacation :</strong> ${dateFR}</p>` +
       `<h3>Agent Rédacteur</h3><p>Nom: ${r.redacteur.nom}</p><p>RIO: ${r.redacteur.rio}</p>` +
       `<p>Grade: ${r.redacteur.grade}</p><h3>Agent Tutoré</h3><p>Nom: ${r.tutore.nom}</p>` +
       `<p>RIO: ${r.tutore.rio}</p><p>Grade: ${r.tutore.grade}</p>` +
