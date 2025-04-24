@@ -50,7 +50,6 @@ document.getElementById('report-form').addEventListener('submit', e => {
     commentaire: document.getElementById('commentaire').innerHTML
   };
   saveRapport(r, editIndex);
-  // record history for create or modify
   if (editIndex == null) {
     saveHistory({action: 'créé', index: getRapports().length, date: new Date()});
     notify('Rapport créé !');
@@ -125,7 +124,6 @@ function openEditModal(i) {
   const modal = document.getElementById('edit-modal');
   const form = document.getElementById('edit-form');
   editIndex = i;
-  // populate fields
   form['redacteur-nom'].value = r.redacteur.nom;
   form['redacteur-rio'].value = r.redacteur.rio;
   form['redacteur-grade'].value = r.redacteur.grade;
@@ -161,6 +159,10 @@ document.getElementById('edit-form').addEventListener('submit', e => {
   renderHistorique();
   notify('Rapport mis à jour !');
 });
+
+function generateReportHTML(r) {
+  return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport</title><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/><style>body{margin:0;display:flex;align-items:center;justify-content:center;background:#1A202C;font-family:'Montserrat',sans-serif} .letter{background:#FFF;width:600px;padding:40px;box-shadow:0 2px 10px rgba(0,0,0,.2);line-height:1.6;white-space:pre-wrap;word-break:break-word;position:relative} .letter u{text-decoration:underline} .download-wrapper{position:absolute;top:20px;right:20px} .download-btn{background:#38B2AC;color:#fff;padding:8px 12px;border:none;border-radius:4px;cursor:pointer} .download-btn:hover{background:#2C5282}</style></head><body><div class="download-wrapper"><button class="download-btn" id="download-btn"><i class="fas fa-download"></i> Télécharger</button></div><div class="letter" id="letter-container"><img src="police_logo.png" style="display:block;margin:0 auto 20px;width:120px"/><h2>Rapport d'évaluation</h2><h3>Agent Rédacteur</h3><p>Nom: ${r.redacteur.nom}</p><p>RIO: ${r.redacteur.rio}</p><p>Grade: ${r.redacteur.grade}</p><h3>Agent Tutoré</h3><p>Nom: ${r.tutore.nom}</p><p>RIO: ${r.tutore.rio}</p><p>Grade: ${r.tutore.grade}</p><h3>Évaluations</h3><ul><li>Radio: ${r.evaluations.radio||'Non évalué'}</li><li>Conduite: ${r.evaluations.conduite||'Non évalué'}</li><li>Adaptation: ${r.evaluations.adaptation||'Non évalué'}</li></ul><h3>Commentaire</h3><blockquote>${r.commentaire||'Aucun commentaire'}</blockquote></div><script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script><script>document.getElementById('download-btn').addEventListener('click',function(){html2canvas(document.getElementById('letter-container'),{scale:2,useCORS:true}).then(canvas=>canvas.toBlob(blob=>{const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='rapport.png';link.click();URL.revokeObjectURL(link.href);},'image/png'));});</script></body></html>`;
+}
 
 function openReport(r) {
   const w = window.open();
