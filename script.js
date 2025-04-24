@@ -62,7 +62,7 @@ document.querySelectorAll('.menu-item').forEach(item => {
   });
 });
 
-// Vider historique
+
 document.getElementById('clear-history').addEventListener('click', clearHistory);
 
 function handleFormSubmit(formId, commentId, isEdit) {
