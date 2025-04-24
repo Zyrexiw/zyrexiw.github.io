@@ -37,3 +37,4 @@ input[type=text],select{padding:8px;border:1px solid #4A5568;border-radius:4px;b
 .btn-submit:hover{background:var(--secondary)}
 .notification{position:fixed;top:20px;right:20px;background:var(--primary);color:#fff;padding:10px;border-radius:4px;display:none}
 .sidebar-footer{margin-top:auto;padding:10px;font-size:0.85rem;text-align:center;color:var(--text);background:var(--sidebar);border-top:1px solid #4A5568}
+
