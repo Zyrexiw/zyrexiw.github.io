@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Moderne (Dark)</title>
+  <!-- Google Fonts: Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2 class="logo">Mon Dashboard</h2>
+      <ul class="menu">
+        <li class="menu-item active" data-tab="historique">
+          <i class="fas fa-clock-rotate-left icon"></i><span>Historique</span>
+        </li>
+        <li class="menu-item" data-tab="rapport-agent">
+          <i class="fas fa-file-alt icon"></i><span>Rapport Agent</span>
+        </li>
+      </ul>
+    </aside>
+    <main class="content">
+      <section id="historique" class="tab-content active">
+        <h1>Historique</h1>
+        <ul id="historique-list" class="history-list"></ul>
+      </section>
+      <section id="rapport-agent" class="tab-content">
+        <h1>Rapport Agent</h1>
+        <div class="rapport-layout">
+          <div class="form-container">
+            <form id="report-form">
+              <fieldset><legend>Agent Rédacteur</legend>
+                <label>Nom & Prénom<input type="text" id="redacteur-nom" required></label>
+                <label>RIO<input type="text" id="redacteur-rio" required></label>
+                <label>Grade<input type="text" id="redacteur-grade" required></label>
+              </fieldset>
+              <fieldset><legend>Agent Tutoré</legend>
+                <label>Nom & Prénom<input type="text" id="tutore-nom" required></label>
+                <label>RIO<input type="text" id="tutore-rio" required></label>
+                <label>Grade<input type="text" id="tutore-grade" required></label>
+              </fieldset>
+              <fieldset><legend>Évaluation</legend>
+                <div class="eval-grid">
+                  <label>Radio<select id="critere-radio"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+                  <label>Conduite<select id="critere-conduite"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+                  <label>Adaptation<select id="critere-adaptation"><option value="">Non évalué</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label>
+                </div>
+              </fieldset>
+              <fieldset><legend>Commentaire</legend>
+                <div class="toolbar">
+                  <button type="button" data-cmd="bold"><i class="fas fa-bold"></i></button>
+                  <button type="button" data-cmd="italic"><i class="fas fa-italic"></i></button>
+                  <input type="color" id="color-picker" title="Choisir la couleur du texte">
+                </div>
+                <div id="commentaire" class="comment-box" contenteditable="true" placeholder="Ajoutez un commentaire…"></div>
+              </fieldset>
+              <button type="submit" class="btn-submit">Générer le rapport</button>
+            </form>
+          </div>
+          <div class="list-container">
+            <h2>Liste des rapports</h2>
+            <ul id="rapport-list" class="report-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div id="notification" class="notification"></div>
+  <script src="script.js"></script>
+</body>
+</html>
