@@ -154,12 +154,34 @@ function removeReport(i) {
 }
 
 
+function getRatingClass(note) {
+  const n = parseInt(note, 10);
+  if (n >= 4) return 'rating-green';
+  if (n === 3) return 'rating-orange';
+  return 'rating-red';
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function generateReportHTML(r) {
-  const dateFR = new Date(r.date)
-    .toLocaleString('fr-FR', {
+  function formatDate(d) {
+    return new Date(d).toLocaleString('fr-FR', {
       day:'2-digit', month:'2-digit', year:'numeric',
       hour:'2-digit', minute:'2-digit'
     });
+  }
+
+  const fields = ['radio', 'conduite', 'adaptation', 'comportement'];
+  const evalHtml = fields.map(f => {
+    const note = r.evaluations[f];
+    if (!note) return `<li>${capitalize(f)}: Non évalué</li>`;
+    const cls = getRatingClass(note);
+    return `<li>${capitalize(f)}: <span class="${cls}">${note}/5</span></li>`;
+  }).join('');
+
+  const dateFR = formatDate(r.date);
 
   return `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport</title>` +
     `<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>` +
@@ -169,6 +191,10 @@ function generateReportHTML(r) {
     `word-break:break-word;position:relative}.download-wrapper{position:absolute;top:20px;right:20px}` +
     `.download-btn{background:#38B2AC;color:#fff;padding:8px 12px;border:none;border-radius:4px;cursor:pointer}` +
     `.download-btn:hover{background:#2C5282}.logo{display:block;margin:0 auto 20px;max-width:150px;height:auto}` +
+    `/* Couleurs pour notes */
+    .rating-green{color:#38B2AC;font-weight:bold}
+    .rating-orange{color:#ED8936;font-weight:bold}
+    .rating-red{color:#E53E3E;font-weight:bold}` +
     `</style><script defer src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script></head><body>` +
     `<div class="download-wrapper"><button class="download-btn" id="download-btn">` +
     `<i class="fas fa-download"></i> Télécharger</button></div><div class="letter">` +
@@ -177,10 +203,7 @@ function generateReportHTML(r) {
     `<p><strong>Date et heure de la vacation :</strong> ${dateFR}</p>` +
     `<h3>Agent Rédacteur</h3><p>Nom: ${r.redacteur.nom}</p><p>Grade: ${r.redacteur.grade}</p>` +
     `<h3>Agent Tutoré</h3><p>Nom: ${r.tutore.nom}</p><p>Grade: ${r.tutore.grade}</p>` +
-    `<h3>Évaluations</h3><ul><li>Radio: ${r.evaluations.radio||'Non évalué'}</li>` +
-    `<li>Conduite: ${r.evaluations.conduite||'Non évalué'}</li>` +
-    `<li>Adaptation: ${r.evaluations.adaptation||'Non évalué'}</li>` +
-    `<li>Comportement: ${r.evaluations.comportement||'Non évalué'}</li></ul>` +
+    `<h3>Évaluations (sur 5)</h3><ul>${evalHtml}</ul>` +
     `<h3>Commentaire</h3><blockquote>${r.commentaire||'Aucun commentaire'}</blockquote></div>` +
     `<script>document.getElementById('download-btn').addEventListener('click',function(){` +
     `html2canvas(document.querySelector('.letter'),{scale:2,useCORS:true,allowTaint:true})` +
@@ -188,7 +211,6 @@ function generateReportHTML(r) {
     `l.download='rapport.png';l.click();URL.revokeObjectURL(l.href);},'image/png'))` +
     `.catch(err=>console.error('html2canvas error:',err));});</script></body></html>`;
 }
-
 
 function openEditModal(i) {
   const r = getRapports()[i];

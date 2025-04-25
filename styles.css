@@ -178,3 +178,7 @@ input[type="datetime-local"]::-webkit-clear-button {
   .sidebar.open{transform:translateX(0)}
   .content{margin-left:0}
 }
+
+.rating-green { color: var(--primary); font-weight: bold; }
+.rating-orange { color: #ED8936; font-weight: bold; }
+.rating-red { color: #E53E3E; font-weight: bold; }
